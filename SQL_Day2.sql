@@ -1045,5 +1045,38 @@ UNION ALL = All (duplicates included)
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+-- Examples
 
+
+-- Use MIN() with GROUP BY
+SELECT MIN(Price) AS SmallestP, CategoryID
+FROM Products
+GROUP BY CategoryID;
+
+
+
+-- SQL counts all non-null values of the "ProductName" column
+SELECT COUNT(ProductName)
+FROM Products;
+
+
+-----
+SELECT COUNT(*) AS [Number of records], CategoryID
+FROM Products
+GROUP BY CategoryID;
+
+
+----
+SELECT AVG(Price) AS AveragePrice, CategoryID
+FROM Products
+GROUP BY CategoryID;
+
+
+
+-----
+
+SELECT * FROM Customers
+WHERE City LIKE '[!acf]%';
+
+-------
 
