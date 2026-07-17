@@ -163,8 +163,52 @@ WHERE Marks > 75
 ORDER BY Right(Name, 3), ID;
 
 
+19 . Write a query that prints a list of employee names (i.e.: the name attribute) from the Employee table in alphabetical order.
 
+SELECT name FROM Employee
+ORDER BY name;
 
+20. Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than  per month who have been employees for less than  months. Sort your result by ascending employee_id.
+
+SELECT name 
+FROM EMPLOYEE 
+WHERE salary > 2000 AND 
+months < 10
+ORDER By employee_id;
+
+21. Query a count of the number of cities in CITY having a Population larger than .
+
+SELECT COUNT(NAME) 
+FROM CITY 
+WHERE POPULATION > 100000;
+
+22. Query the total population of all cities in CITY where District is California.
+
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+
+23. Query all columns for a city in CITY with the ID 1661.
+
+SELECT * FROM CITY
+WHERE ID = 1661;
+
+24. Query the average population of all cities in CITY where District is California.
+
+SELECT AVG(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California';
+
+25. Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN
+
+SELECT SUM(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+
+26. Query the difference between the maximum and minimum populations in CITY.
+
+SELECT MAX(POPULATION) - MIN(POPULATION)
+FROM CITY;
 
 
 
