@@ -210,6 +210,7 @@ WHERE COUNTRYCODE = 'JPN';
 SELECT MAX(POPULATION) - MIN(POPULATION)
 FROM CITY;
 
+
 27.  Query the average population for all cities in CITY, rounded down to the nearest integer.
 
 SELECT FLOOR(AVG(POPULATION))
@@ -229,5 +230,54 @@ FROM STATION
 WHERE LAT_N < 137.2345;
 
 
+30. Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than  and less than . Truncate your answer to 4 decimal places.
 
+#Syntax ->   DECIMAL(value, precision, scale)
+
+SELECT DECIMAL(SUM(LAT_N),20,4)
+FROM STATION
+WHERE LAT_N > 38.7880 AND LAT_N < 137.2345;
+
+31. Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than . Round your answer to 4 decimal places.
+
+
+SELECT CAST(ROUND(LONG_W, 4) AS DECIMAL(10,4))
+FROM STATION
+WHERE LAT_N = (
+    SELECT MIN(LAT_N)
+    FROM STATION
+    WHERE LAT_N > 38.7780
+);
+
+
+32. Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than . Round your answer to 4  decimal places.
+
+SELECT CAST(ROUND(LONG_W, 4) AS DECIMAL(10,4))
+FROM STATION
+WHERE LAT_N = (
+    SELECT MAX(LAT_N)
+    FROM STATION
+    WHERE LAT_N < 137.2345
+);
+
+
+33. Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns
+
+SELECT CITY.NAME
+FROM CITY
+JOIN COUNTRY
+ON CITY.CountryCode = COUNTRY.Code
+WHERE CONTINENT = 'Africa';
+
+34. Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+
+Note: CITY.CountryCode and COUNTRY.Code are matching key columns.
+
+SELECT COUNTRY.Continent, FLOOR(AVG(CITY.Population))
+FROM CITY
+JOIN COUNTRY
+ON  CITY.CountryCode = COUNTRY.Code
+GROUP BY COUNTRY.Continent;
 
