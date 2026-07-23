@@ -365,3 +365,40 @@ ROUND(SQRT(
     ),4)
 FROM STATION;
 
+
+41. We define an employee's total earnings to be their monthly  worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as  space-separated integers.
+
+SELECT MAX(salary * months), COUNT(*)
+FROM Employee
+WHERE salary * months = (
+    SELECT MAX(salary * months)
+    FROM Employee
+);
+
+
+42. You are given three tables: Students, Friends and Packages. Students contains two columns: ID and Name. Friends contains two columns: ID and Friend_ID (ID of the ONLY best friend). Packages contains two columns: ID and Salary (offered salary in $ thousands per month).
+
+SELECT S.Name
+FROM Students AS S
+JOIN Friends AS F
+ON S.ID =  F.ID
+JOIN Packages P1
+ON P1.ID = S.ID
+JOIN Packages P2
+ON P2.ID = F.Friend_ID
+WHERE P2.Salary > P1.Salary
+Order By P2.Salary;
+
+
+43. Two pairs (X1, Y1) and (X2, Y2) are said to be symmetric pairs if X1 = Y2 and X2 = Y1.
+Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1.
+
+SELECT DISTINCT F1.X, F1.Y
+FROM Functions F1
+JOIN Functions F2
+ON F1.X=F2.Y AND F1.Y = F2.X
+WHERE( F1.X < F1.Y OR ( F1.X = F1.Y AND (
+SELECT COUNT(*)
+FROM Functions
+WHERE X = F1.X AND Y = F1.Y ) > 1 ) )
+ORDER BY F1.X; 
