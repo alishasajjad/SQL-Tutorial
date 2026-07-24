@@ -365,7 +365,6 @@ ROUND(SQRT(
     ),4)
 FROM STATION;
 
-
 41. We define an employee's total earnings to be their monthly  worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as  space-separated integers.
 
 SELECT MAX(salary * months), COUNT(*)
@@ -402,3 +401,54 @@ SELECT COUNT(*)
 FROM Functions
 WHERE X = F1.X AND Y = F1.Y ) > 1 ) )
 ORDER BY F1.X; 
+
+
+44. P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+* 
+* * 
+* * * 
+* * * * 
+* * * * *
+Write a query to print the pattern P(20).
+
+WITH RECURSIVE numbers AS
+( SELECT 1 AS n
+UNION ALL
+SELECT n + 1
+FROM numbers
+WHERE n < 20 )
+SELECT
+REPEAT('* ', n)
+FROM numbers;
+
+
+45. P(R) represents a pattern drawn by Julia in R rows. The following pattern represents P(5):
+
+* * * * * 
+* * * * 
+* * * 
+* * 
+*
+Write a query to print the pattern P(20).
+
+WITH RECURSIVE numbers AS
+( SELECT 20 AS n
+UNION ALL
+SELECT n - 1
+FROM numbers
+WHERE n > 1 )
+SELECT
+REPEAT('* ', n)
+FROM numbers;
+
+
+46. Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's  key was broken until after completing the calculation. She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+Write a query calculating the amount of error (i.e.:  average monthly salaries), and round it up to the next integer.
+
+SELECT CEIL(AVG(Salary) - AVG(REPLACE(Salary, '0', '')))
+FROM EMPLOYEES;
+
+## AVG(CAST(REPLACE(Salary, '0', '') AS UNSIGNED)) # MySQL -> implicit conversion
+
+
