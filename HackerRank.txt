@@ -452,3 +452,51 @@ FROM EMPLOYEES;
 ## AVG(CAST(REPLACE(Salary, '0', '') AS UNSIGNED)) # MySQL -> implicit conversion
 
 
+47. Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of  from your result.
+
+SELECT H.hacker_id, H.name, T.total_score
+FROM Hackers H
+JOIN (
+SELECT hacker_id, SUM(max_score) AS total_score
+FROM (
+SELECT hacker_id, challenge_id, MAX(score) AS max_score
+FROM Submissions
+GROUP BY hacker_id, challenge_id) X
+GROUP BY  hacker_id ) T
+ON H.hacker_id = T.hacker_id
+WHERE T.total_score > 0
+ORDER BY T.total_score DESC, H.hacker_id ASC;
+
+
+48. Write a query to find the node type of Binary Tree ordered by the value of the node. Output one of the following for each node:
+Root: If node is root node.
+Leaf: If node is leaf node.
+Inner: If node is neither root nor leaf node.
+
+SELECT N,
+CASE
+WHEN P IS NULL  THEN 'Root'
+WHEN N NOT IN (
+SELECT P
+FROM BST 
+WHERE P IS NOT NULL)  THEN 'Leaf'
+ELSE 'Inner'
+END
+FROM BST
+ORDER BY N;
+
+
+49. Write a query to print all prime numbers less than or equal to . Print your result on a single line, and use the ampersand () character as your separator (instead of a space).
+
+WITH RECURSIVE numbers AS
+( SELECT 2 AS n
+UNION ALL
+SELECT n + 1
+FROM numbers
+WHERE n < 1000)
+SELECT GROUP_CONCAT(n.n ORDER BY n.n SEPARATOR '&')
+FROM numbers n
+WHERE NOT EXISTS (     
+SELECT 1
+FROM numbers d
+WHERE d.n > 1 AND d.n < n.n AND  MOD(n.n, d.n) = 0 );
