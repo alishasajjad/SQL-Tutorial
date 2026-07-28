@@ -500,3 +500,48 @@ WHERE NOT EXISTS (
 SELECT 1
 FROM numbers d
 WHERE d.n > 1 AND d.n < n.n AND  MOD(n.n, d.n) = 0 );
+
+
+50. Given the table schemas below, write a query to print the company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. Order your output by ascending company_code.
+Note:
+The tables may contain duplicate records.
+The company_code is string, so the sorting should not be numeric. For example, if the company_codes are C_1, C_2, and C_10, then the ascending company_codes will be C_1, C_10, and C_2.
+
+SELECT C.company_code, C.founder, COUNT(DISTINCT L.lead_manager_code),COUNT(DISTINCT S.senior_manager_code), COUNT(DISTINCT M.manager_code),COUNT(DISTINCT E.employee_code)
+FROM Company C
+LEFT JOIN Lead_Manager L
+ON C.company_code = L.company_code
+LEFT JOIN Senior_Manager S
+ON C.company_code = S.company_code
+LEFT JOIN Manager M
+ON C.company_code = M.company_code
+LEFT JOIN Employee E
+ON C.company_code = E.company_code
+GROUP BY C.company_code, C.founder
+ORDER BY C.company_code;
+
+
+51. A median is defined as a number separating the higher half of a data set from the lower half. Query the median of the Northern Latitudes (LAT_N) from STATION and round your answer to  decimal places.
+
+SELECT ROUND(AVG(LAT_N),4)
+FROM (
+SELECT LAT_N, ROW_NUMBER() OVER(ORDER BY LAT_N) AS rn, COUNT(*) OVER() AS total
+FROM STATION ) T
+WHERE (MOD(total,2)=1 AND rn=(total+1)/2) OR
+(MOD(total,2)=0 AND rn IN (total/2,(total/2)+1));
+
+
+52. Pivot the Occupation column in OCCUPATIONS so that each Name is sorted alphabetically and displayed underneath its corresponding Occupation. The output should consist of four columns (Doctor, Professor, Singer, and Actor) in that specific order, with their respective names listed alphabetically under each column.
+Note: Print NULL when there are no more names corresponding to an occupation.
+
+SELECT 
+MAX(CASE WHEN Occupation='Doctor' THEN Name END),
+MAX(CASE WHEN Occupation='Professor' THEN Name END),
+MAX(CASE WHEN Occupation='Singer' THEN Name END),
+MAX(CASE WHEN Occupation='Actor' THEN Name END)
+FROM (
+SELECT Name, Occupation, ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY Name) AS rn
+FROM OCCUPATIONS ) T
+GROUP BY rn
+ORDER BY rn;
+
