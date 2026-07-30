@@ -596,3 +596,43 @@ FROM Challenges
 GROUP BY hacker_id) T))
 ORDER BY COUNT(C.challenge_id) DESC, H.hacker_id ASC;
 
+
+56. Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order. If there is more than one project that have the same number of completion days, then order by the start date of the project.
+
+SELECT * FROM 
+(SELECT S.Start_Date, (
+SELECT MIN(E.End_Date)
+FROM ( 
+SELECT End_Date 
+FROM Projects
+WHERE End_Date NOT IN ( SELECT Start_Date FROM Projects ) ) E
+WHERE E.End_Date > S.Start_Date) AS End_Date
+FROM ( 
+SELECT Start_Date
+FROM Projects
+WHERE Start_Date NOT IN ( SELECT End_Date FROM Projects ) ) S
+) T
+ORDER BY DATEDIFF(T.End_Date, T.Start_Date), T.Start_Date;
+
+57. Samantha interviews many candidates from different colleges using coding challenges and contests. Write a query to print the contest_id, hacker_id, name, and the sums of total_submissions, total_accepted_submissions, total_views, and total_unique_views for each contest sorted by contest_id. Exclude the contest from the result if all four sums are 0.
+
+SELECT C.contest_id, C.hacker_id, C.name, SUM(S.total_submissions), SUM(S.total_accepted_submissions),SUM(V.total_views), SUM(V.total_unique_views)
+FROM Contests C
+JOIN Colleges Co
+ON C.contest_id = Co.contest_id
+JOIN Challenges Ch
+ON Ch.college_id = Co.college_id
+LEFT JOIN (
+SELECT challenge_id, SUM(total_views) AS total_views, SUM(total_unique_views) AS total_unique_views
+FROM View_Stats
+GROUP BY challenge_id) V
+ON Ch.challenge_id = V.challenge_id
+LEFT JOIN (
+SELECT challenge_id, SUM(total_submissions) AS total_submissions, SUM(total_accepted_submissions) AS total_accepted_submissions
+FROM Submission_Stats
+GROUP BY challenge_id) S
+ON Ch.challenge_id = S.challenge_id
+GROUP BY C.contest_id, C.hacker_id, C.name
+HAVING NOT ( COALESCE(SUM(S.total_submissions), 0) = 0 AND COALESCE(SUM(S.total_accepted_submissions), 0) = 0 AND COALESCE(SUM(V.total_views), 0) = 0 AND COALESCE(SUM(V.total_unique_views), 0) = 0)
+ORDER BY C.contest_id;
+
