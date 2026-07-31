@@ -636,3 +636,46 @@ GROUP BY C.contest_id, C.hacker_id, C.name
 HAVING NOT ( COALESCE(SUM(S.total_submissions), 0) = 0 AND COALESCE(SUM(S.total_accepted_submissions), 0) = 0 AND COALESCE(SUM(V.total_views), 0) = 0 AND COALESCE(SUM(V.total_unique_views), 0) = 0)
 ORDER BY C.contest_id;
 
+
+58. Julia conducted a  days of learning SQL contest. The start date of the contest was March 01, 2016 and the end date was March 15, 2016.
+Write a query to print total number of unique hackers who made at least  submission each day (starting on the first day of the contest), and find the hacker_id and name of the hacker who made maximum number of submissions each day. If more than one such hacker has a maximum number of submissions, print the lowest hacker_id. The query should print this information for each day of the contest, sorted by the date.
+
+SELECT C.submission_date, C.continuous_hackers, W.hacker_id, H.name
+FROM (
+SELECT submission_date, COUNT(DISTINCT hacker_id) AS continuous_hackers
+FROM (
+SELECT S1.submission_date, S1.hacker_id
+FROM Submissions S1
+WHERE (
+SELECT COUNT(DISTINCT S2.submission_date)
+FROM Submissions S2
+WHERE S2.hacker_id = S1.hacker_id AND S2.submission_date BETWEEN '2016-03-01' AND S1.submission_date ) = DATEDIFF(S1.submission_date, '2016-03-01') + 1 ) X
+GROUP BY submission_date ) C
+JOIN (
+SELECT * FROM (
+SELECT submission_date, hacker_id, submissions, ROW_NUMBER() OVER ( PARTITION BY submission_date
+ORDER BY submissions DESC, hacker_id ASC
+) AS rn
+FROM (
+SELECT submission_date, hacker_id, COUNT(*) AS submissions
+FROM Submissions
+GROUP BY submission_date, hacker_id ) T ) R
+WHERE rn = 1 ) W
+ON C.submission_date = W.submission_date
+JOIN Hackers H
+ON W.hacker_id = H.hacker_id
+ORDER BY C.submission_date;
+
+
+59. Generate the following two result sets:
+Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). For example: AnActorName(A), ADoctorName(D), AProfessorName(P), and ASingerName(S).
+Query the number of occurrences of each occupation in OCCUPATIONS. Sort the occurrences in ascending order, and output them in the following format:
+
+SELECT CONCAT(Name, '(', LEFT(Occupation,1), ')')
+FROM OCCUPATIONS
+ORDER BY Name;
+
+SELECT CONCAT('There are a total of ', COUNT(*), ' ', LOWER(Occupation), 's.')
+FROM OCCUPATIONS
+GROUP BY  Occupation
+ORDER BY Count(*), Occupation;
