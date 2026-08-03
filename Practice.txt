@@ -1,0 +1,75 @@
+# Advance SQL 
+
+WITH best_scores AS(
+SELECT event_id, participant_name, MAX(score) AS best_score
+FROM scoretable
+GROUP BY event_id, participant_name),
+ranked AS (
+SELECT event_id, participant_name, best_score, DENSE_RANK() OVER ( 
+PARTITION BY event_id
+ORDER BY best_score DESC ) AS rnk
+FROM best_scores)
+SELECT event_id, GROUP_CONCAT(
+CASE WHEN rnk = 1 THEN participant_name END
+ORDER BY participant_name
+SEPARATOR ',' ) AS first,
+GROUP_CONCAT(
+CASE WHEN rnk = 2 THEN participant_name END
+ORDER BY participant_name
+SEPARATOR ',' ) AS second,
+GROUP_CONCAT(
+CASE WHEN rnk = 3 THEN participant_name END
+ORDER BY participant_name
+SEPARATOR ',' ) AS third
+FROM ranked
+WHERE rnk <= 3
+GROUP BY event_id
+ORDER BY event_id;
+
+-----------------------------------------------------------------------------
+
+SELECT C.algorithm,
+ROUND(SUM(CASE
+WHEN YEAR(T.dt) = 2020 AND QUARTER(T.dt) = 1 THEN T.volume
+ELSE 0
+END), 6) AS transactions_Q1,
+ROUND(SUM(CASE
+WHEN YEAR(T.dt) = 2020 AND QUARTER(T.dt) = 2 THEN T.volume
+ELSE 0
+END), 6) AS transactions_Q2,
+ROUND(SUM(CASE
+WHEN YEAR(T.dt) = 2020 AND QUARTER(T.dt) = 3 THEN T.volume
+ELSE 0
+END), 6) AS transactions_Q3,
+ROUND(SUM(CASE
+WHEN YEAR(T.dt) = 2020 AND QUARTER(T.dt) = 4 THEN T.volume
+ELSE 0
+END), 6) AS transactions_Q4
+FROM coins C
+LEFT JOIN transactions T
+ON C.code = T.coin_code
+GROUP BY C.algorithm
+ORDER BY C.algorithm;
+---------------------------------------
+
+# SQL Practice 
+
+# Basic 
+
+1. Write a query to display: name, salary. Sort the results by salary in descending order.
+
+SELECT name, salary
+FROM Employees
+ORDER BY salary DESC;
+
+2. Display all columns of employees whose salary is greater than 55000.
+
+SELECT * FROM Employees
+WHERE salary > 55000;
+
+3. Display: name, salary for employees who: belong to the IT department, and have a salary greater than 55000 Sort the results by name in ascending order.
+
+SELECT name, salary 
+FROM Employees
+WHERE department = IT AND salary > 55000
+ORDER BY name;
