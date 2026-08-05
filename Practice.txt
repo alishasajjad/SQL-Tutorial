@@ -94,3 +94,23 @@ SELECT name, department
 FROM Employees
 WHERE name LIKE 'A%'
 ORDER BY name;
+
+7. Write a query to find the total number of employees.
+
+SELECT COUNT(*) AS total_employees
+FROM Employees;
+
+8. Write a query to display the average salary of all employees.
+
+SELECT AVG(salary) AS average_salary
+FROM Employees;
+
+9. Write a query to display: highest salary, lowest salary
+
+SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
+FROM Employees;
+
+10. Average salary round 2 decimal places
+
+SELECT ROUND(AVG(salary),2) AS average_salary
+FROM Employees;
