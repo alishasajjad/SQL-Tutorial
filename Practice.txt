@@ -114,3 +114,21 @@ FROM Employees;
 
 SELECT ROUND(AVG(salary),2) AS average_salary
 FROM Employees;
+
+11. Write a query to find the total salary of all employees.
+
+SELECT SUM(salary) AS total_salary
+FROM Employees;
+
+12. Display all unique departments. Sort them alphabetically.
+
+SELECT DISTINCT(department) 
+FROM Employees
+ORDER BY department;
+
+13. Display: department, total number of employees. Use alias: employee_count. Sort by employee_count descending.
+
+SELECT department, COUNT(*) AS employee_count
+FROM Employees
+GROUP BY department
+ORDER BY employee_count DESC;
