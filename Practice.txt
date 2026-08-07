@@ -132,3 +132,30 @@ SELECT department, COUNT(*) AS employee_count
 FROM Employees
 GROUP BY department
 ORDER BY employee_count DESC;
+
+14. Display: department, total salary of each department. Alias: total_salary. Sort by total_salary descending.
+
+SELECT department, SUM(salary) AS total_salary
+FROM Employees
+GROUP BY department 
+ORDER BY total_salary desc;
+
+15. Display: department, average salary of each department.Alias: average_salary. Sort by average_salary descending.
+
+SELECT department, AVG(salary) AS average_salary
+FROM Employees
+GROUP BY department 
+ORDER BY average_salary desc;
+
+16. Display: department, highest salary in each department. Alias: highest_salary. Sort alphabetically by department.
+
+SELECT department, MAX(salary) AS highest_salary
+FROM Employees
+GROUP BY department 
+ORDER BY department;
+
+17. Decimal PLaces Limit 
+
+SELECT department, ROUND(AVG(salary), 2) AS average_salary
+FROM Employees
+GROUP BY department;
