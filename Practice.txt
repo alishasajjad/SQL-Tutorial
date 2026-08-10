@@ -159,3 +159,25 @@ ORDER BY department;
 SELECT department, ROUND(AVG(salary), 2) AS average_salary
 FROM Employees
 GROUP BY department;
+
+18. Display departments having more than 2 employees.
+
+SELECT department, COUNT(*) AS employee_count
+FROM Employees
+GROUP BY department
+HAVING COUNT(*) > 2;
+
+19. Display departments whose total salary is greater than 150000.
+
+SELECT department, SUM(salary) AS total_salary
+FROM Employees
+GROUP BY department
+HAVING SUM(salary) > 150000;
+
+20. Display departments whose average salary is less than 70000.
+
+SELECT department, AVG(salary) AS average_salary
+FROM Employees
+GROUP BY department
+HAVING AVG(salary) < 70000
+ORDER BY average_salary;
