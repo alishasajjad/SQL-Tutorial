@@ -62,10 +62,12 @@ SELECT name, salary
 FROM Employees
 ORDER BY salary DESC;
 
+
 2. Display all columns of employees whose salary is greater than 55000.
 
 SELECT * FROM Employees
 WHERE salary > 55000;
+
 
 3. Display: name, salary for employees who: belong to the IT department, and have a salary greater than 55000 Sort the results by name in ascending order.
 
@@ -74,19 +76,23 @@ FROM Employees
 WHERE department = IT AND salary > 55000
 ORDER BY name;
 
+
 4. Write a query to display: name, salary for employees whose salary is between 55000 and 70000 (inclusive).
 Sort the result by salary ascending.
+
 
 SELECT name, salary
 FROM Employees
 WHERE salary BETWEEN 55000 AND 70000
 ORDER BY salary;
 
+
 5. Write a query to display: all columns for employees who belong to either: IT, HR. Sort the result by department, then name.
 
 SELECT * FROM Employees
 WHERE department IN ('IT', 'HR')
 ORDER BY department, name;
+
 
 6. Write a query to display: name, department for employees whose name starts with the letter A. Sort the result alphabetically by name.
 
@@ -95,36 +101,43 @@ FROM Employees
 WHERE name LIKE 'A%'
 ORDER BY name;
 
+
 7. Write a query to find the total number of employees.
 
 SELECT COUNT(*) AS total_employees
 FROM Employees;
+
 
 8. Write a query to display the average salary of all employees.
 
 SELECT AVG(salary) AS average_salary
 FROM Employees;
 
+
 9. Write a query to display: highest salary, lowest salary
 
 SELECT MAX(salary) AS highest_salary, MIN(salary) AS lowest_salary
 FROM Employees;
+
 
 10. Average salary round 2 decimal places
 
 SELECT ROUND(AVG(salary),2) AS average_salary
 FROM Employees;
 
+
 11. Write a query to find the total salary of all employees.
 
 SELECT SUM(salary) AS total_salary
 FROM Employees;
+
 
 12. Display all unique departments. Sort them alphabetically.
 
 SELECT DISTINCT(department) 
 FROM Employees
 ORDER BY department;
+
 
 13. Display: department, total number of employees. Use alias: employee_count. Sort by employee_count descending.
 
@@ -133,12 +146,14 @@ FROM Employees
 GROUP BY department
 ORDER BY employee_count DESC;
 
+
 14. Display: department, total salary of each department. Alias: total_salary. Sort by total_salary descending.
 
 SELECT department, SUM(salary) AS total_salary
 FROM Employees
 GROUP BY department 
 ORDER BY total_salary desc;
+
 
 15. Display: department, average salary of each department.Alias: average_salary. Sort by average_salary descending.
 
@@ -147,6 +162,7 @@ FROM Employees
 GROUP BY department 
 ORDER BY average_salary desc;
 
+
 16. Display: department, highest salary in each department. Alias: highest_salary. Sort alphabetically by department.
 
 SELECT department, MAX(salary) AS highest_salary
@@ -154,11 +170,13 @@ FROM Employees
 GROUP BY department 
 ORDER BY department;
 
+
 17. Decimal PLaces Limit 
 
 SELECT department, ROUND(AVG(salary), 2) AS average_salary
 FROM Employees
 GROUP BY department;
+
 
 18. Display departments having more than 2 employees.
 
@@ -167,12 +185,14 @@ FROM Employees
 GROUP BY department
 HAVING COUNT(*) > 2;
 
+
 19. Display departments whose total salary is greater than 150000.
 
 SELECT department, SUM(salary) AS total_salary
 FROM Employees
 GROUP BY department
 HAVING SUM(salary) > 150000;
+
 
 20. Display departments whose average salary is less than 70000.
 
@@ -181,3 +201,38 @@ FROM Employees
 GROUP BY department
 HAVING AVG(salary) < 70000
 ORDER BY average_salary;
+
+
+21. Display:name, salary , AS column salary_level Rules:salary >= 70000 → High, salary >= 55000 → Medium, otherwise → Low. Sort by salary descending.
+
+SELECT name, salary,
+CASE 
+    WHEN salary >= 70000 THEN 'High'
+    WHEN salary >= 55000 THEN 'Medium'
+    ELSE 'Low'
+END AS salary_level
+FROM Employees;
+
+
+22. Display each department and the number of employees earning a salary of 70000 or more, using the alias high_salary_employees, sorted by high_salary_employees in descending order.
+
+SELECT department, COUNT(
+CASE
+    WHEN salary >= 70000 THEN 1
+    ELSE NULL
+END ) AS high_salary_employees
+FROM Employees
+GROUP BY department
+ORDER BY high_salary_employees DESC;
+
+
+23. Display each department and the total salary of employees earning 60000 or more, using the alias high_salary_total, sorted by high_salary_total in descending order.
+
+SELECT department, SUM(
+    CASE
+    WHEN salary >= 60000 THEN salary
+    ELSE 0
+END) AS high_salary_total
+FROM Employees
+GROUP BY department
+ORDER BY high_salary_total DESC;
