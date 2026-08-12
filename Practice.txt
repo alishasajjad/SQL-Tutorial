@@ -236,3 +236,37 @@ END) AS high_salary_total
 FROM Employees
 GROUP BY department
 ORDER BY high_salary_total DESC;
+
+
+24. Display name, salary, and a salary_category where salary >= 70000 = 'High', salary >= 60000 = 'Medium', otherwise 'Low'.
+
+SELECT name, salary,
+CASE 
+    WHEN salary >= 70000 THEN 'High'
+    WHEN salary >= 60000 THEN 'Medium'
+    ELSE 'Low'
+END AS salary_category
+FROM Employees;
+
+
+25. Display name, department, and a department_type where IT = 'Technical', HR = 'Non-Technical', otherwise 'Other'.
+
+SELECT name, department,
+CASE
+    WHEN department = 'IT' THEN 'Technical'
+    WHEN department = 'HR' THEN 'Non-Technical'
+    ELSE 'Other'
+END AS department_type
+FROM Employees;
+
+
+26. Display name, salary, and a bonus where salary >= 70000 → 10% of salary, salary >= 60000 → 5% of salary, otherwise 0.
+
+SELECT name, salary,
+CASE
+    WHEN salary >= 70000 THEN salary * 0.10
+    WHEN salary >= 60000 THEN salary * 0.05
+    ELSE 0
+END AS bonus
+FROM Employees;
+
