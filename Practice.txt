@@ -270,3 +270,39 @@ CASE
 END AS bonus
 FROM Employees;
 
+
+27. Display each department and the number of employees earning less than 60000, using the alias low_salary_employees, sorted by low_salary_employees descending.
+
+SELECT department, COUNT(
+CASE
+    WHEN salary < 60000 THEN 1
+    ELSE NULL
+END ) AS low_salary_employees
+FROM Employees
+GROUP BY department
+ORDER BY low_salary_employees DESC;
+
+
+28. Display each department and the total bonus amount, where employees earning 70000 or more get a 10% bonus and others get 0, using the alias total_bonus, sorted by total_bonus descending.
+
+SELECT department, SUM(
+CASE
+    WHEN salary >= 70000 THEN salary *0.10
+    ELSE 0
+END) AS total_bonus
+FROM Employees
+GROUP BY department
+ORDER BY total_bonus desc;
+
+
+29.Display each department and the number of employees earning 60000 or more, using the alias eligible_employees, sorted by department alphabetically.
+
+SELECT department, COUNT(
+CASE
+    WHEN salary >=60000 THEN 1
+    ELSE NULL
+END ) AS eligible_employees
+FROM Employees
+GROUP BY department
+ORDER BY department;
+
