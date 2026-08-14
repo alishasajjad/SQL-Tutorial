@@ -306,3 +306,48 @@ FROM Employees
 GROUP BY department
 ORDER BY department;
 
+
+30. Display each department and its average salary, but show only departments where at least 2 employees earn 60000 or more.
+
+SELECT department, AVG(salary) AS average_salary, COUNT(
+CASE
+    WHEN salary >= 60000 THEN 1
+    ELSE NULL
+END ) AS eligible_employees
+FROM Employees
+GROUP BY department
+HAVING COUNT(
+CASE
+    WHEN salary >= 60000 THEN 1
+    ELSE NULL
+END ) >= 2;
+
+
+31. Display the names and salaries of employees whose salary is greater than the average salary of all employees.
+
+SELECT name, salary
+FROM Employees
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM Employees);
+
+
+32. Display the names of employees who work in departments where at least one employee earns more than 75000.
+
+SELECT name
+FROM Employees
+WHERE department IN (
+    SELECT department
+    FROM Employees
+    WHERE salary > 75000);
+
+
+33. Display the department and average salary for departments whose average salary is greater than the overall company average salary.
+
+SELECT department, AVG(salary) AS average_salary
+FROM Employees
+GROUP BY department
+HAVING AVG(salary) > (
+    SELECT AVG(salary)
+    FROM Employees);
+
