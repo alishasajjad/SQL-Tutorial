@@ -386,3 +386,40 @@ HAVING SUM(salary) > (
         GROUP BY department
     ) T
 );
+
+
+37. Display departments having more than 2 employees whose average salary is greater than 60000.
+
+SELECT department
+FROM Employees
+GROUP BY department
+HAVING COUNT(*) > 2
+AND AVG(salary) > 60000;
+
+
+38. Display departments whose total salary is greater than the total salary of the HR department.
+
+SELECT department
+FROM Employees
+GROUP BY department
+HAVING SUM(salary) > (
+    SELECT SUM(salary)
+    FROM Employees
+    WHERE department = 'HR'
+);
+
+
+39. Display departments whose total salary is greater than the average total salary of departments having at least 2 employees.
+
+SELECT department
+FROM Employees
+GROUP BY department
+HAVING SUM(salary) > (
+    SELECT AVG(total_salary)
+    FROM (
+        SELECT SUM(salary) AS total_salary
+        FROM Employees
+        GROUP BY department
+        HAVING COUNT(*) >= 2
+    ) T
+);
